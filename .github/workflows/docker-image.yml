@@ -34,7 +34,7 @@ jobs:
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t joelmndz/api-nest-ci:${NEW_VERSION} .
+        docker build -t joelmndz/api-nest-ci:${{ env.NEW_VERSION }} .
         docker build -t joelmndz/api-nest-ci:latest .
 
     # Subir imagen a docker hub
@@ -42,5 +42,5 @@ jobs:
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker push joelmndz/api-nest-ci:${NEW_VERSION}
+        docker push joelmndz/api-nest-ci:$NEW_VERSION
         docker push joelmndz/api-nest-ci:latest
