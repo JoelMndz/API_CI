@@ -13,6 +13,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    # Paquete para generar una nueva versión de manera automática
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+      
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      # docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    # Construcción de imagen con el versionamiento anterior
+    - name: Build Doocker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker build -t joelmndz/api-nest-ci:$NEW_VERSION .
+        docker build -t joelmndz/api-nest-ci:latest .
+
+    # Subir imagen a docker hub
+    - name: Push Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker push joelmndz/api-nest-ci:$NEW_VERSION
+        docker push joelmndz/api-nest-ci:latest
