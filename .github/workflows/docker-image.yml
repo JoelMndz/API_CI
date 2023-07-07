@@ -34,8 +34,8 @@ jobs:
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t joelmndz/api-nest-ci:${{ env.NEW_VERSION }} -f Dockerfile .
-        docker build -t joelmndz/api-nest-ci:latest -f Dockerfile .
+        docker build -t joelmndz/api-nest-ci:${{ env.NEW_VERSION }} -f / .
+        docker build -t joelmndz/api-nest-ci:latest -f / .
 
     # Subir imagen a docker hub
     - name: Push Docker Image
