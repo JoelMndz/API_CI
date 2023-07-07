@@ -1,5 +1,6 @@
 # CI
 Este repositorio tiene integración continua, cuando se hace un commit en main se genera una nueva version de su imagen en docker hub
+- Joel Méndez
 ## Evidencias
 
 - Obtener idiomas Idiomas
